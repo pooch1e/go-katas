@@ -7,7 +7,10 @@ with a real implementation until the tests go green.
 */
 package slicekata
 
-import "errors"
+import (
+	"errors"
+	"slices"
+)
 
 var (
 	ErrEmpty      = errors.New("empty slice")
@@ -15,18 +18,35 @@ var (
 )
 
 func SumAll(nums []int) int {
-	return 0
+	var count int
+	for _, i := range nums {
+		count += i
+	}
+	return count
 }
 
 func DoubleAll(nums []int) []int {
-	return nil
+	result := []int{}
+	if len(nums) == 0 {
+		return result
+	}
+	for _, v := range nums {
+		result = append(result, v*2)
+	}
+	return result
 }
 
 func FindMax(nums []int) (int, error) {
-	return 0, nil
+	if len(nums) == 0 {
+		return 0, ErrEmpty
+	}
+	return slices.Max(nums), nil;
 }
 
 func ReverseInPlace(nums []int) {
+	for i, j := 0, len(nums) - 1; i < j; i, j = i + 1, j - 1 {
+		nums[i], nums[j] = nums[j], nums[i]
+	}
 }
 
 func CountOccurrences(words []string, target string) int {
