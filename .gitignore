@@ -1,0 +1,10 @@
+*.exe
+*.test
+*.out
+coverage.*
+__debug_bin*
+/bin/
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/settings.json
