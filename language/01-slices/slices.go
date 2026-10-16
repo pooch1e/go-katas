@@ -50,13 +50,28 @@ func ReverseInPlace(nums []int) {
 }
 
 func CountOccurrences(words []string, target string) int {
-	return 0
+	var count int;
+	for _, i := range words {
+		if target == i {
+			count ++
+		}
+	}
+	return count
 }
 
 func Flatten(nested [][]int) []int {
-	return nil
+	var result []int
+	if (len(nested) == 0) {
+		return result
+	}
+
+	for _, i := range nested {
+		result = append(result, i...)
+	}
+	return result
 }
 
 func RemoveAt(nums []int, i int) ([]int, error) {
-	return nil, nil
+	return slices.Delete(slices.Clone(nums), i, i+1), nil
+	
 }

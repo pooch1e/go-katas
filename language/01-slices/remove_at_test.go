@@ -5,6 +5,7 @@ written tests show the happy path; the todo tests are yours to fill in.
 package slicekata_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,11 +25,17 @@ func TestRemoveAt(t *testing.T) {
 	// but nums[:i] shares nums' backing array, so append writes straight
 	// over the caller's data. Print the input after calling it and see.
 	t.Run("does not mutate the input", func(t *testing.T) {
-		t.Skip("todo")
+		input := []int{10, 20, 30}
+		original := slices.Clone(input)
+		got, err := slicekata.RemoveAt(input, 0)
+
+    require.NoError(t, err)
+    assert.Equal(t, []int{20, 30}, got)
+    assert.Equal(t, original, input)
 	})
 
 	t.Run("returns ErrOutOfRange for a negative index", func(t *testing.T) {
-		t.Skip("todo")
+		assert.ErrorIs("index out of range")
 	})
 
 	t.Run("returns ErrOutOfRange for an index equal to len", func(t *testing.T) {
