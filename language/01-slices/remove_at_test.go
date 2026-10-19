@@ -35,10 +35,12 @@ func TestRemoveAt(t *testing.T) {
 	})
 
 	t.Run("returns ErrOutOfRange for a negative index", func(t *testing.T) {
-		assert.ErrorIs("index out of range")
+		_, err := slicekata.RemoveAt([]int{1, 2, 3}, -1)
+		assert.ErrorIs(t, err, slicekata.ErrOutOfRange)
 	})
 
 	t.Run("returns ErrOutOfRange for an index equal to len", func(t *testing.T) {
-		t.Skip("todo")
+		_, err := slicekata.RemoveAt([]int{1, 2, 3}, 3)
+		assert.ErrorIs(t, err, slicekata.ErrOutOfRange)
 	})
 }

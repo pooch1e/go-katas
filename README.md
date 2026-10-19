@@ -118,3 +118,35 @@ Do the language track in order. The algorithms track assumes you've done it (at 
 | `it.todo("...")` | `t.Run("...", func(t *testing.T) { t.Skip("todo") })` |
 
 **`assert` vs `require`:** `assert.X` records a failure and keeps going. `require.X` stops the test immediately. Use `require` when later lines would be meaningless (or would crash) after a failure, e.g. `require.NoError(t, err)` before using the result.
+
+## Asserting errors
+
+`assert.Error(t, err, "msg")` only checks that `err` is non-nil. The last argument is a label printed on failure, **not** something matched against the error. Pick the assertion that matches what you actually want to check:
+
+| You want to check | Use |
+|---|---|
+| Any error occurred | `assert.Error(t, err)` |
+| It is (or wraps) a specific sentinel like `ErrOutOfRange` | `assert.ErrorIs(t, err, ErrOutOfRange)` |
+| It is (or wraps) a custom error type | `assert.ErrorAs(t, err, &target)` |
+| The message contains some text | `assert.ErrorContains(t, err, "out of range")` |
+| The message matches exactly | `assert.EqualError(t, err, "index out of range")` |
+| No error occurred | `assert.NoError(t, err)` |
+
+Prefer `ErrorIs` for sentinels. It uses `errors.Is`, so it still passes if the function later wraps the error with `fmt.Errorf("...: %w", ErrOutOfRange)`, whereas `EqualError` and `ErrorContains` break when the wording changes.
+
+```go
+t.Run("returns ErrOutOfRange for a negative index", func(t *testing.T) {
+    _, err := RemoveAt([]int{1, 2, 3}, -1)
+    assert.ErrorIs(t, err, ErrOutOfRange)
+})
+```
+
+Use `ErrorAs` when you define your own error struct and want to inspect its fields:
+
+```go
+var target *IndexError
+require.ErrorAs(t, err, &target)
+assert.Equal(t, -1, target.Index)
+```
+
+Use `require.*` instead of `assert.*` when later lines depend on the error being present.

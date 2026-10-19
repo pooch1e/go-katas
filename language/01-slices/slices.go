@@ -72,6 +72,9 @@ func Flatten(nested [][]int) []int {
 }
 
 func RemoveAt(nums []int, i int) ([]int, error) {
+	if i < 0 || i >= len(nums) {
+		return nil, ErrOutOfRange
+	}
 	return slices.Delete(slices.Clone(nums), i, i+1), nil
 	
 }
