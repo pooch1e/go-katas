@@ -4,16 +4,30 @@ comma-ok lookup, iterating (in random order), and maps as reference types.
 */
 package mapkata
 
-import "errors"
+import (
+	"errors"
+	"unicode"
+)
 
 var ErrDuplicateValue = errors.New("duplicate value")
 
 func CountLetters(s string) map[rune]int {
-	return nil
+	count := make(map[rune]int)
+	for _, c := range s {
+		if !unicode.IsLetter(c) {
+			continue
+		}
+		count[unicode.ToLower(c)]++
+	}
+	return count
 }
 
 func GroupByLength(words []string) map[int][]string {
-	return nil
+	groups := make(map[int][]string)
+	for _, v := range words {
+		groups[len(v)] = append(groups[len(v)], v)
+	}
+	return groups
 }
 
 func Invert(m map[string]string) (map[string]string, error) {
